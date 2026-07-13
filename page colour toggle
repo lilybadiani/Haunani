@@ -1,0 +1,130 @@
+<style>
+  #haunani-toggle {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 50px;
+    padding: 14px 10px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  #haunani-toggle .toggle-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.4);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    margin-top: 4px;
+  }
+  #haunani-toggle .dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+  }
+  #haunani-toggle .dot:hover { transform: scale(1.15); }
+  #haunani-toggle .dot.active { border-color: rgba(0,0,0,0.35); }
+
+  @media (max-width: 640px) {
+    #haunani-toggle {
+      position: static;
+      flex-direction: row;
+      border-radius: 50px;
+      padding: 10px 16px;
+      margin: 1rem auto 0;
+      width: fit-content;
+      transform: none;
+      top: auto;
+      left: auto;
+      box-shadow: none;
+      background: rgba(255,255,255,0.7);
+    }
+    #haunani-toggle .toggle-label {
+      writing-mode: horizontal-tb;
+      transform: none;
+      margin-top: 0;
+      margin-right: 4px;
+    }
+  }
+</style>
+
+<div id="haunani-toggle">
+  <span class="toggle-label">Change page colour</span>
+  <div class="dot active" data-colour="#F7F3ED" data-glasses="original" style="background:#E8E0D0;border-color:rgba(0,0,0,0.35);" title="Original"></div>
+  <div class="dot" data-colour="#BBDEFB" data-glasses="blue" style="background:#BBDEFB;" title="Blue"></div>
+  <div class="dot" data-colour="#D1C4E9" data-glasses="lilac" style="background:#D1C4E9;" title="Lavender"></div>
+  <div class="dot" data-colour="#C8E6C9" data-glasses="green" style="background:#C8E6C9;" title="Green"></div>
+  <div class="dot" data-colour="#F8BBD0" data-glasses="original" style="background:#F8BBD0;" title="Pink"></div>
+  <div class="dot" data-colour="#FBECB9" data-glasses="yellow" style="background:#FBECB9;" title="Yellow"></div>
+</div>
+
+<script>
+(function() {
+  var GLASSES = {
+    original: "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/8943e276-330d-42d5-be53-eb24f2975029/Original.png?content-type=image%2Fpng",
+    blue:     "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/9ae99bba-43ff-412b-8460-2cebec8bbb25/Blue.png?content-type=image%2Fpng",
+    lilac:    "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/24f7825d-f29e-48fa-bd20-23e43d54d937/Lilac.png?content-type=image%2Fpng",
+    green:    "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/8fea7eb2-9cb4-4405-bcde-0c933d5f5926/Green.png?content-type=image%2Fpng",
+    yellow:   "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/87256cfb-d9d2-4a9c-943f-d4762a554242/Yellow.png?content-type=image%2Fpng"
+  };
+
+  function findIllustration() {
+    var imgs = document.querySelectorAll('img');
+    for (var i = 0; i < imgs.length; i++) {
+      if (imgs[i].src && imgs[i].src.indexOf('Original.png') > -1) return imgs[i];
+    }
+    for (var j = 0; j < imgs.length; j++) {
+      var src = imgs[j].src || '';
+      if (src.indexOf('Blue.png') > -1 || src.indexOf('Lilac.png') > -1 ||
+          src.indexOf('Green.png') > -1 || src.indexOf('Yellow.png') > -1) return imgs[j];
+    }
+    return null;
+  }
+
+  var dots = document.querySelectorAll('#haunani-toggle .dot');
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      var colour = this.getAttribute('data-colour');
+      var glasses = this.getAttribute('data-glasses');
+
+      document.documentElement.style.setProperty('background-color', colour, 'important');
+      document.body.style.setProperty('background-color', colour, 'important');
+      var allSections = document.querySelectorAll('section, .sqs-block, .sqs-layout, [data-section-id], .page-section');
+      allSections.forEach(function(el) {
+        el.style.setProperty('background-color', 'transparent', 'important');
+      });
+
+      var img = findIllustration();
+      if (img) {
+        img.style.opacity = '0';
+        setTimeout(function() {
+          img.src = GLASSES[glasses];
+          img.style.opacity = '1';
+        }, 200);
+      }
+
+      dots.forEach(function(d) {
+        d.classList.remove('active');
+        d.style.borderColor = 'transparent';
+      });
+      this.classList.add('active');
+      this.style.borderColor = 'rgba(0,0,0,0.35)';
+    });
+  });
+})();
+</script>
