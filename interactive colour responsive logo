@@ -1,0 +1,38 @@
+<style>
+  #lens-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+  }
+  #lens-image {
+    width: 100%;
+    max-width: 650px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    transition: opacity 0.25s ease;
+  }
+</style>
+<div id="lens-widget">
+  <img id="lens-image"
+    src="https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/8943e276-330d-42d5-be53-eb24f2975029/Original.png?content-type=image%2Fpng"
+    alt="Haunani illustration"/>
+</div>
+<script>
+var lensImages = {
+  original: "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/8943e276-330d-42d5-be53-eb24f2975029/Original.png?content-type=image%2Fpng",
+  blue:     "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/9ae99bba-43ff-412b-8460-2cebec8bbb25/Blue.png?content-type=image%2Fpng",
+  lilac:    "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/24f7825d-f29e-48fa-bd20-23e43d54d937/Lilac.png?content-type=image%2Fpng",
+  green:    "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/8fea7eb2-9cb4-4405-bcde-0c933d5f5926/Green.png?content-type=image%2Fpng",
+  yellow:   "https://images.squarespace-cdn.com/content/69c7fe2b1915ad21355f8c2a/87256cfb-d9d2-4a9c-943f-d4762a554242/Yellow.png?content-type=image%2Fpng"
+};
+function setLens(colour) {
+  var img = document.getElementById('lens-image');
+  img.style.opacity = '0';
+  setTimeout(function() {
+    img.src = lensImages[colour];
+    img.style.opacity = '1';
+  }, 200);
+}
+</script>
